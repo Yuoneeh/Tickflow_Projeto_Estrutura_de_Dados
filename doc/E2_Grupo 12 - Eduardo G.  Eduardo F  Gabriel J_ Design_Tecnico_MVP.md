@@ -39,6 +39,17 @@ Para cada estrutura escolhida (mínimo 1, máximo 3):
 
 ---
 
+- **Fila** (linear, hierárquica, etc.)
+- **Complexidade de tempo e espaço** das operações principais em notação Big-O (inserção, remoção, busca, acesso)
+- **Justificativa:** por que esta estrutura foi escolhida para este problema específico?
+- **Comparação com ao menos 1 alternativa descartada** e motivo da exclusão
+- **Limitações conhecidas** no contexto do problema
+- **Referência bibliográfica** (livro ou artigo — ABNT ou IEEE)
+
+
+
+---
+
 ### 2. Arquitetura em Camadas
 
 Diagrama e descrição da arquitetura com as **3 camadas mínimas exigidas:**
