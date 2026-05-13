@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TickFlow — Evento</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+.event-hero { position: relative; height: 420px; overflow: hidden; display: flex; align-items: flex-end; }
+.event-hero-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 200px; filter: blur(8px); opacity: 0.3; transform: scale(1.1); }
+.event-hero-gradient { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 30%, var(--bg) 100%); }
+.event-hero-content { position: relative; z-index: 2; padding: 40px; width: 100%; }
+.event-tag { display: inline-block; background: var(--neon); color: #080810; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; margin-bottom: 16px; }
+.event-nome { font-family: var(--font-display); font-size: clamp(48px,7vw,80px); line-height: 0.9; margin-bottom: 8px; }
+.event-artista { font-size: 20px; color: var(--muted); }
+.event-body { padding: 0 40px 80px; display: grid; grid-template-columns: 1fr 360px; gap: 48px; }
+.section-h3 { font-family: var(--font-display); font-size: 22px; letter-spacing: 0.04em; margin-bottom: 16px; color: var(--muted); text-transform: uppercase; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.info-item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; }
+.info-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+.info-val { font-size: 16px; font-weight: 600; }
+.event-desc { color: var(--muted); line-height: 1.8; font-size: 15px; }
+.ticket-panel { position: sticky; top: 84px; }
+.ticket-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; }
+.ticket-price { font-family: var(--font-display); font-size: 48px; color: var(--neon); line-height: 1; }
+.ticket-price-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.avail-bar { margin: 20px 0; }
+.avail-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.bar-track { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--neon); border-radius: 2px; }
+.bar-fill.low { background: var(--neon2); }
+.ticket-notes { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); line-height: 1.8; }
+@media (max-width: 768px) { .event-body { grid-template-columns: 1fr; padding: 0 20px 60px; } .ticket-panel { position: static; } .info-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="toast-container" id="toastContainer"></div>
+
+<nav class="topbar">
+  <a class="logo" href="/home">TICK<span>FLOW</span></a>
+  <div class="topbar-actions">
+    <button class="btn btn-secondary btn-sm" onclick="history.back()">← Voltar</button>
+    <div class="user-chip">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <span class="user-name" id="userName">...</span>
+    </div>
+  </div>
+</nav>
+
+<div id="content" class="animate-in">
+  <div style="text-align:center;padding:120px 40px;color:var(--muted);">Carregando evento...</div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const eventoId = params.get('id');
+
+async function init() {
+  const meRes = await fetch('/api/me');
+  if (!meRes.ok) { window.location.href = '/'; return; }
+  const me = await meRes.json();
+  const nome = me.usuario.nome;
+  document.getElementById('userName').textContent = nome.split(' ')[0];
+  document.getElementById('userAvatar').textContent = nome.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+
+  if (!eventoId) { window.location.href = '/home'; return; }
+  const res = await fetch(`/api/eventos/${eventoId}`);
+  if (!res.ok) { window.location.href = '/home'; return; }
+  const e = await res.json();
+  render(e);
+  document.title = `TickFlow — ${e.nome}`;
+}
+
+function render(e) {
+  const disp = e.ingressos - e.vendidos;
+  const pct = Math.round((e.vendidos / e.ingressos) * 100);
+  const esgotado = disp <= 0;
+  const baixo = pct >= 90 && !esgotado;
+  const dataFmt = new Date(e.data + 'T12:00:00').toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+
+  document.getElementById('content').innerHTML = `
+    <div class="event-hero">
+      <div class="event-hero-bg">${e.emoji}</div>
+      <div class="event-hero-gradient"></div>
+      <div class="event-hero-content">
+        <div class="event-tag">${e.genero}</div>
+        <div class="event-nome">${e.nome}</div>
+        <div class="event-artista">${e.artista}</div>
+      </div>
+    </div>
+
+    <div class="event-body">
+      <div>
+        <div style="margin-bottom:40px;">
+          <h3 class="section-h3">Informações</h3>
+          <div class="info-grid">
+            <div class="info-item"><div class="info-label">📅 Data</div><div class="info-val">${dataFmt}</div></div>
+            <div class="info-item"><div class="info-label">⏰ Horário</div><div class="info-val">${e.horario}</div></div>
+            <div class="info-item"><div class="info-label">📍 Local</div><div class="info-val">${e.local}</div></div>
+            <div class="info-item">
+              <div class="info-label">🎫 Disponíveis</div>
+              <div class="info-val" style="color:${esgotado ? 'var(--neon2)' : baixo ? 'var(--neon)' : 'inherit'}">
+                ${esgotado ? 'ESGOTADO' : disp.toLocaleString('pt-BR') + ' ingressos'}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="section-h3">Sobre o Show</h3>
+          <p class="event-desc">${e.descricao || 'Informações em breve.'}</p>
+        </div>
+      </div>
+
+      <div class="ticket-panel">
+        <div class="ticket-card">
+          <div class="ticket-price-label">Ingresso a partir de</div>
+          <div class="ticket-price">R$ ${e.preco.toLocaleString('pt-BR')}</div>
+          <div class="avail-bar">
+            <div class="avail-labels"><span>Ocupação</span><span>${pct}%</span></div>
+            <div class="bar-track"><div class="bar-fill ${pct >= 90 ? 'low' : ''}" style="width:${pct}%"></div></div>
+          </div>
+          ${esgotado
+            ? `<p style="color:var(--neon2);text-align:center;font-size:14px;font-weight:600;padding:20px 0;">Este evento está esgotado</p>`
+            : `<button class="btn btn-primary btn-full btn-lg" onclick="entrarNaFila()" style="margin-top:8px;">
+                🎟️ Entrar na Fila de Compra
+               </button>`
+          }
+          <div class="ticket-notes">
+            🔒 Compra segura e protegida<br>
+            ⚡ Fila justa — ordem de chegada (FIFO)<br>
+            ↩️ Desfaça ações com a pilha (LIFO)
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function entrarNaFila() {
+  window.location.href = `/fila?id=${eventoId}`;
+}
+
+init();
+</script>
+</body>
+</html>
