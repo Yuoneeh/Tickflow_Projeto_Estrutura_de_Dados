@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TickFlow — Fila de Compra</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+.queue-page { padding: 40px; max-width: 900px; margin: 0 auto; }
+.queue-header { margin-bottom: 48px; }
+.queue-header h2 { font-family: var(--font-display); font-size: 48px; letter-spacing: 0.04em; margin-bottom: 8px; }
+.queue-header p { color: var(--muted); font-size: 15px; }
+
+/* Waiting */
+.queue-waiting { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 60px 32px; text-align: center; margin-bottom: 32px; }
+.queue-spinner { width: 60px; height: 60px; border: 3px solid var(--surface2); border-top-color: var(--neon); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 24px; }
+.pos-big { font-family: var(--font-display); font-size: 80px; color: var(--neon); line-height: 1; margin: 20px 0 8px; }
+.pos-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+/* Queue list */
+.queue-visual { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 32px; }
+.queue-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.queue-title-row h3 { font-family: var(--font-display); font-size: 22px; letter-spacing: 0.04em; }
+.queue-badge { background: rgba(232,255,71,0.1); border: 1px solid rgba(232,255,71,0.3); border-radius: 20px; padding: 4px 14px; font-size: 12px; color: var(--neon); font-weight: 600; }
+.queue-list { display: flex; flex-direction: column; gap: 8px; }
+.q-item { display: flex; align-items: center; gap: 16px; padding: 14px 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; transition: all 0.3s; animation: slideIn 0.3s ease; }
+.q-item.current { border-color: var(--neon); background: rgba(232,255,71,0.05); }
+.q-pos { width: 32px; height: 32px; background: var(--surface2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.q-item.current .q-pos { background: var(--neon); color: #080810; }
+.q-name { flex: 1; font-size: 14px; font-weight: 500; }
+.q-time { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+.q-status { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.q-item.current .q-status { color: var(--neon); }
+
+/* Purchase form */
+.purchase-form { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; }
+.purchase-title { font-family: var(--font-display); font-size: 28px; letter-spacing: 0.04em; margin-bottom: 8px; }
+.purchase-sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+.qty-control { display: flex; align-items: center; background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; width: fit-content; }
+.qty-btn { width: 44px; height: 44px; background: transparent; border: none; color: var(--text); font-size: 18px; cursor: pointer; transition: all 0.2s; }
+.qty-btn:hover { background: var(--surface); color: var(--neon); }
+.qty-display { width: 56px; text-align: center; font-family: var(--font-mono); font-size: 18px; font-weight: 700; border-left: 1px solid var(--border); border-right: 1px solid var(--border); padding: 10px 0; }
+.order-summary { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+.order-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+.order-row.total { color: var(--text); font-weight: 600; font-size: 16px; margin-bottom: 0; padding-top: 12px; margin-top: 8px; border-top: 1px solid var(--border); }
+.order-total-val { color: var(--neon); font-family: var(--font-display); font-size: 24px; }
+.actions-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.stack-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.stack-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; font-family: var(--font-mono); }
+.stack-item { font-size: 12px; color: var(--muted); font-family: var(--font-mono); display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.stack-dot { width: 6px; height: 6px; background: var(--surface2); border-radius: 50%; flex-shrink: 0; }
+.stack-item.topo .stack-dot { background: var(--neon2); }
+
+.code-note { background: var(--surface); border: 1px solid rgba(232,255,71,0.15); border-radius: 8px; padding: 16px 20px; font-size: 13px; color: var(--muted); font-family: var(--font-mono); line-height: 1.8; margin-bottom: 32px; }
+
+@media (max-width: 768px) { .queue-page { padding: 20px; } .form-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="toast-container" id="toastContainer"></div>
+
+<nav class="topbar">
+  <a class="logo" href="/home">TICK<span>FLOW</span></a>
+  <div class="topbar-actions">
+    <button class="btn btn-secondary btn-sm" id="backBtn">← Voltar</button>
+    <div class="user-chip">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <span class="user-name" id="userName">...</span>
+    </div>
+  </div>
+</nav>
+
+<div class="queue-page animate-in" id="queuePage">
+  <div style="text-align:center;padding:80px;color:var(--muted);">Entrando na fila...</div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const eventoId = parseInt(params.get('id'));
+let usuario = null;
+let evento = null;
+let filaState = [];
+let qty = 1;
+let faseCompra = false;
+
+document.getElementById('backBtn').href = `/evento?id=${eventoId}`;
+document.getElementById('backBtn').onclick = () => { window.location.href = `/evento?id=${eventoId}`; };
+
+async function init() {
+  const meRes = await fetch('/api/me');
+  if (!meRes.ok) { window.location.href = '/'; return; }
+  const me = await meRes.json();
+  usuario = me.usuario;
+  const nome = usuario.nome;
+  document.getElementById('userName').textContent = nome.split(' ')[0];
+  document.getElementById('userAvatar').textContent = nome.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+
+  const eRes = await fetch(`/api/eventos/${eventoId}`);
+  evento = await eRes.json();
+  document.title = `TickFlow — Fila: ${evento.nome}`;
+
+  // Entrar na fila
+  const filaRes = await fetch('/api/fila/entrar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ evento_id: eventoId })
+  });
+  const filaData = await filaRes.json();
+  filaState = filaData.fila;
+
+  renderWaiting(filaData.posicao, filaData.fila);
+  iniciarContagem(filaData.posicao);
+}
+
+function renderWaiting(posicao, fila) {
+  const page = document.getElementById('queuePage');
+  page.innerHTML = `
+    <div class="queue-header">
+      <h2>FILA DE COMPRA</h2>
+      <p>${evento.nome} — ${evento.local}</p>
+    </div>
+
+    <div class="queue-waiting" id="waitingBox">
+      <div class="queue-spinner"></div>
+      <div class="pos-big">#${posicao}</div>
+      <div class="pos-label">sua posição na fila</div>
+      <h3 style="margin-top:20px;font-family:var(--font-display);font-size:28px;">Aguardando sua vez...</h3>
+      <p style="margin-top:8px;color:var(--muted);">Processando os usuários à sua frente. Aguarde.</p>
+    </div>
+
+    <div class="queue-visual">
+      <div class="queue-title-row">
+        <h3>FILA FIFO — Ordem de chegada</h3>
+        <span class="queue-badge" id="qBadge">${fila.length} na fila</span>
+      </div>
+      <div class="queue-list" id="qList">
+        ${fila.map((u, i) => `
+          <div class="q-item ${u.usuario_atual ? 'current' : ''}">
+            <div class="q-pos">${i + 1}</div>
+            <div class="q-name">${u.usuario_atual ? '👤 ' + u.nome + ' (você)' : u.nome}</div>
+            <div class="q-time">${u.timestamp}</div>
+            <div class="q-status">${u.usuario_atual ? 'aguardando' : 'na fila'}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="code-note">
+      <strong style="color:var(--text);">// Estrutura: FilaCompra (FIFO)</strong><br>
+      Operação enqueue(): inserção no final — <strong>O(1)</strong><br>
+      Operação dequeue(): remoção da frente — <strong>O(1)</strong><br>
+      Operação frente() / peek(): consulta sem remoção — <strong>O(1)</strong>
+    </div>
+  `;
+}
+
+function iniciarContagem(posicaoInicial) {
+  let pos = posicaoInicial;
+  const intervalo = setInterval(async () => {
+    // Avança a fila no backend
+    await fetch('/api/fila/proximo', { method: 'POST' });
+    pos--;
+
+    if (pos <= 1) {
+      clearInterval(intervalo);
+      // Remover o próprio usuário da frente
+      await fetch('/api/fila/proximo', { method: 'POST' });
+      renderPurchaseForm();
+    } else {
+      const wBox = document.getElementById('waitingBox');
+      const qList = document.getElementById('qList');
+      if (wBox) wBox.querySelector('.pos-big').textContent = `#${pos}`;
+      if (qList) {
+        const items = qList.querySelectorAll('.q-item');
+        if (items[0]) items[0].remove();
+        const badge = document.getElementById('qBadge');
+        if (badge) badge.textContent = `${pos} na fila`;
+      }
+    }
+  }, 1500);
+}
+
+async function renderPurchaseForm() {
+  faseCompra = true;
+  await fetch('/api/compra/iniciar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ evento_id: eventoId, quantidade: qty })
+  });
+
+  const pilhaRes = await fetch('/api/pilha/estado');
+  const pilhaData = await pilhaRes.json();
+
+  document.getElementById('queuePage').innerHTML = `
+    <div class="queue-header">
+      <h2>COMPRAR INGRESSO</h2>
+      <p>${evento.nome} — ${evento.local}</p>
+    </div>
+
+    <div class="purchase-form">
+      <div class="purchase-title">É A SUA VEZ!</div>
+      <p class="purchase-sub">Você tem <strong style="color:var(--neon)">10 minutos</strong> para concluir. Escolha a quantidade e confirme.</p>
+
+      <div class="form-grid">
+        <div>
+          <div class="input-group" style="margin-bottom:16px;">
+            <label>Quantidade de ingressos</label>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(-1)">−</button>
+              <div class="qty-display" id="qtyDisplay">1</div>
+              <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Tipo de ingresso</label>
+            <select id="tipoIngresso" onchange="updateSummary()">
+              <option value="1">Pista — R$ ${evento.preco.toLocaleString('pt-BR')}</option>
+              <option value="1.8">VIP — R$ ${(evento.preco * 1.8).toLocaleString('pt-BR')}</option>
+              <option value="2.5">Camarote — R$ ${(evento.preco * 2.5).toLocaleString('pt-BR')}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="order-summary" id="orderSummary">
+          ${summaryHTML(1)}
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button class="btn btn-primary btn-lg" onclick="confirmar()" style="flex:1;">🎟️ Confirmar Compra</button>
+        <button class="btn btn-secondary" onclick="desfazer()">↩️ Desfazer</button>
+      </div>
+
+      <div class="stack-panel" id="stackPanel">
+        <div class="stack-title">// PilhaAcoes (LIFO) — histórico de ações</div>
+        <div id="stackList">${renderStack(pilhaData.pilha)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function summaryHTML(q) {
+  const mult = parseFloat(document.getElementById('tipoIngresso')?.value || '1');
+  const preco = Math.round(evento.preco * mult);
+  const subtotal = preco * q;
+  const taxa = Math.round(subtotal * 0.1);
+  const total = subtotal + taxa;
+  return `
+    <div class="order-row"><span>Ingresso (${q}x)</span><span>R$ ${subtotal.toLocaleString('pt-BR')}</span></div>
+    <div class="order-row"><span>Taxa de serviço</span><span>R$ ${taxa.toLocaleString('pt-BR')}</span></div>
+    <div class="order-row total"><span>Total</span><span class="order-total-val">R$ ${total.toLocaleString('pt-BR')}</span></div>
+  `;
+}
+
+function updateSummary() {
+  const el = document.getElementById('orderSummary');
+  if (el) el.innerHTML = summaryHTML(qty);
+}
+
+async function changeQty(delta) {
+  const disp = Math.min(10, evento.ingressos - evento.vendidos);
+  qty = Math.max(1, Math.min(disp, qty + delta));
+  document.getElementById('qtyDisplay').textContent = qty;
+  updateSummary();
+  const res = await fetch('/api/compra/quantidade', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ quantidade: qty })
+  });
+  const data = await res.json();
+  document.getElementById('stackList').innerHTML = renderStack(data.pilha);
+}
+
+async function desfazer() {
+  const res = await fetch('/api/compra/desfazer', { method: 'POST' });
+  if (res.ok) {
+    const data = await res.json();
+    showToast(`↩️ Desfeito: ${data.desfeito.descricao}`, 'success');
+    // Restaura qty se aplicável
+    if (data.desfeito.tipo === 'ALTERAR_QUANTIDADE') {
+      const anterior = data.pilha.find(a => a.tipo === 'ALTERAR_QUANTIDADE');
+      if (anterior) qty = anterior.payload.quantidade;
+      else qty = 1;
+      document.getElementById('qtyDisplay').textContent = qty;
+      updateSummary();
+    }
+    document.getElementById('stackList').innerHTML = renderStack(data.pilha);
+  } else {
+    showToast('Nada para desfazer', 'error');
+  }
+}
+
+async function confirmar() {
+  const res = await fetch('/api/compra/confirmar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ evento_id: eventoId, quantidade: qty })
+  });
+  const data = await res.json();
+  if (data.ok) {
+    sessionStorage.setItem('compraResultado', JSON.stringify(data.resultado));
+    window.location.href = '/sucesso';
+  } else {
+    showToast(data.erro || 'Erro ao confirmar compra', 'error');
+  }
+}
+
+function renderStack(pilha) {
+  if (!pilha || !pilha.length) return '<div class="stack-item"><div class="stack-dot"></div>Pilha vazia</div>';
+  return pilha.slice(0, 6).map((a, i) => `
+    <div class="stack-item ${i === 0 ? 'topo' : ''}">
+      <div class="stack-dot"></div>
+      ${i === 0 ? '← TOPO | ' : ''}${a.descricao}
+    </div>`).join('');
+}
+
+function showToast(msg, type = 'success') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${type === 'success' ? '✓' : '⚠'}</span> ${msg}`;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+init();
+</script>
+</body>
+</html>
