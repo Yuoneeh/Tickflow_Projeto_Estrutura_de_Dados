@@ -1,7 +1,11 @@
 /**
  * api.js — Camada de comunicação com o backend Python (Flask)
  * Todos os fetch() do projeto passam por aqui.
+<<<<<<< HEAD
  * trocar BASE_URL para apontar para o servidor.
+=======
+ * Basta trocar BASE_URL para apontar para o servidor do grupo.
+>>>>>>> 3874dd9e333183197b7b78e84cb2d9fac51cdca3
  */
 
 const BASE_URL = "http://localhost:5000";
