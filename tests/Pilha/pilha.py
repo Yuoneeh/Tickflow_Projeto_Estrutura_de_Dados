@@ -1,3 +1,5 @@
+from No import No
+
 
 class PilhaEncadeada:
     def __init__(self):
@@ -24,9 +26,12 @@ class PilhaEncadeada:
 
 
     def pop(self):
-        
-        
-          self.is_empty()
+        if self.topo == None:
+          print(f'UnderFlow Reconhecido, Encerrando Processamento.')
+          return True
+        else:
+          return False
+         # self.is_empty()
           T = self.topo
           topo = T.prox
           T.prox = None
