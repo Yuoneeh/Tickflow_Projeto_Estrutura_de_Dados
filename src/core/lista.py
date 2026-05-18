@@ -1,3 +1,4 @@
+import core.No as No
 class ListaEventos:
     def InsertOrdenado(self, e):
         pass
