@@ -24,7 +24,7 @@ class EventoService:
             with open(DATA_PATH, "r", encoding="utf-8") as f:
                 eventos = json.load(f)
             for e in eventos:
-                self.lista.InsertOrdenado(e)
+                self.lista.inserir_ordenado(e)
                 if e["id"] >= self._proximo_id:
                     self._proximo_id = e["id"] + 1
         except (FileNotFoundError, json.JSONDecodeError):
@@ -46,22 +46,22 @@ class EventoService:
     def adicionar_evento(self, dados: dict) -> dict:
         """Adiciona um novo evento à lista ordenada e persiste."""
         evento = {
-            "id":        self._proximo_id,
-            "nome":      dados["nome"],
-            "artista":   dados["artista"],
-            "genero":    dados.get("genero", "Outros"),
-            "data":      dados["data"],
-            "horario":   dados.get("horario", "20:00"),
-            "local":     dados["local"],
-            "preco":     float(dados["preco"]),
+            "id": self._proximo_id,
+            "nome": dados["nome"],
+            "artista": dados["artista"],
+            "genero": dados.get("genero", "Outros"),
+            "data": dados["data"],
+            "horario": dados.get("horario", "20:00"),
+            "local": dados["local"],
+            "preco": float(dados["preco"]),
             "ingressos": int(dados["ingressos"]),
-            "vendidos":  0,
-            "emoji":     dados.get("emoji", "🎵"),
-            "cor":       dados.get("cor", "#e8ff47"),
+            "vendidos": 0,
+            "emoji": dados.get("emoji", "🎵"),
+            "cor": dados.get("cor", "#e8ff47"),
             "descricao": dados.get("descricao", ""),
         }
         self._proximo_id += 1
-        self.lista.InsertOrdenado(evento)
+        self.lista.inserir_ordenado(evento)
         self._salvar_dados()
         return evento
 
@@ -79,45 +79,41 @@ class EventoService:
 
     def filtrar(self, busca: str = "", genero: str = "", ordenar_por: str = "data") -> list:
         """
-        Filtra e ordena eventos.
+        Filtra e ordena eventos (aplicado sobre a lista já ordenada por data).
         Ordenações extras usam Bubble Sort manual — sem sorted() nativo.
         """
         eventos = self.lista.para_lista()
 
-        # Filtro por texto
+        # Filtro texto
         if busca:
             busca_low = busca.lower()
-            eventos = [
-                e for e in eventos
-                if busca_low in e["nome"].lower() or busca_low in e["artista"].lower()
-            ]
+            eventos = [e for e in eventos if busca_low in e["nome"].lower() or busca_low in e["artista"].lower()]
 
-        # Filtro por gênero
+        # Filtro gênero
         if genero and genero != "todos":
             eventos = [e for e in eventos if e["genero"].lower() == genero.lower()]
 
-        # Ordenação manual (Bubble Sort) — proibido usar sort() ou sorted()
+        # Ordenação manual (Bubble Sort)
         if ordenar_por == "preco_asc":
             eventos = self._bubble_sort(eventos, key="preco", reverso=False)
         elif ordenar_por == "preco_desc":
             eventos = self._bubble_sort(eventos, key="preco", reverso=True)
         elif ordenar_por == "nome":
             eventos = self._bubble_sort(eventos, key="nome", reverso=False)
-        # "data" já vem ordenado da lista encadeada
+        # "data" já vem ordenado da lista
 
         return eventos
 
     def _bubble_sort(self, lista: list, key: str, reverso: bool) -> list:
         """
         Bubble Sort manual — O(n²).
-        Implementação obrigatória conforme regras do projeto.
-        Proibido usar sort() ou sorted().
+        Proibido usar sort() ou sorted() conforme regras do projeto.
         """
         arr = lista[:]
         n = len(arr)
         for i in range(n):
             for j in range(0, n - i - 1):
-                val_j    = arr[j][key]
+                val_j = arr[j][key]
                 val_next = arr[j + 1][key]
                 if isinstance(val_j, str):
                     condicao = val_j.lower() > val_next.lower()
@@ -132,6 +128,6 @@ class EventoService:
         eventos = self.lista.para_lista()
         total_disp = sum(e["ingressos"] - e["vendidos"] for e in eventos)
         return {
-            "total_eventos":                 len(eventos),
-            "total_ingressos_disponiveis":   total_disp,
+            "total_eventos": len(eventos),
+            "total_ingressos_disponiveis": total_disp,
         }
