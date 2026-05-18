@@ -1,0 +1,15 @@
+import core.pilha as PilhaEncadeada
+
+Pilha = PilhaEncadeada()
+Pilha.peek()
+Pilha.push(10)
+Pilha.peek()
+Pilha.peek()
+Pilha.push(30)
+Pilha.push(40)
+Pilha.peek()
+Pilha.size()
+Pilha.listar()
+Pilha.pop()
+Pilha.listar()
+Pilha.peek()

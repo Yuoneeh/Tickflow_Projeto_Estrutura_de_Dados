@@ -24,7 +24,7 @@ class EventoService:
             with open(DATA_PATH, "r", encoding="utf-8") as f:
                 eventos = json.load(f)
             for e in eventos:
-                self.lista.inserir_ordenado(e)
+                self.lista.InsertOrdenado(e)
                 if e["id"] >= self._proximo_id:
                     self._proximo_id = e["id"] + 1
         except (FileNotFoundError, json.JSONDecodeError):
@@ -61,7 +61,7 @@ class EventoService:
             "descricao": dados.get("descricao", ""),
         }
         self._proximo_id += 1
-        self.lista.inserir_ordenado(evento)
+        self.lista.InsertOrdenado(evento)
         self._salvar_dados()
         return evento
 
