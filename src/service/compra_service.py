@@ -19,3 +19,6 @@ class CompraService :
 
         #Pilha
         self.pilha = []
+
+    def topo_pilha(self):
+        pass

@@ -1,5 +1,5 @@
 
-import core.No as No
+#import core.No as No
 
 class PilhaEncadeada:
     def __init__(self):
