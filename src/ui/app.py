@@ -8,19 +8,17 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
 from flask import Flask, request, jsonify, send_from_directory, session
-from flask_cors import CORS
 from src.service.evento_service import EventoService
 from src.service.compra_service import CompraService
 from src.service.auth_service import AuthService
 
 app = Flask(__name__, static_folder="static")
 app.secret_key = "tickflow_secret_2025"
-CORS(app, supports_credentials=True)
 
 # ── Instâncias dos serviços ──────────────────────────────────
 evento_svc = EventoService()
 compra_svc = CompraService(evento_svc)
-auth_svc   = AuthService()
+auth_svc = AuthService()
 
 # ── Helper ───────────────────────────────────────────────────
 
@@ -58,7 +56,7 @@ def sucesso():
 @app.route("/api/login", methods=["POST"])
 def api_login():
     dados = request.json
-    user  = auth_svc.login(dados.get("email", ""), dados.get("senha", ""))
+    user = auth_svc.login(dados.get("email", ""), dados.get("senha", ""))
     if user:
         session["usuario"] = user
         return jsonify({"ok": True, "usuario": user})
@@ -67,7 +65,7 @@ def api_login():
 @app.route("/api/cadastrar", methods=["POST"])
 def api_cadastrar():
     dados = request.json
-    user  = auth_svc.cadastrar(dados["nome"], dados["email"], dados["senha"])
+    user = auth_svc.cadastrar(dados["nome"], dados["email"], dados["senha"])
     if user:
         session["usuario"] = user
         return jsonify({"ok": True, "usuario": user})
@@ -97,11 +95,11 @@ def api_me():
 
 @app.route("/api/eventos")
 def api_eventos():
-    busca   = request.args.get("busca", "")
-    genero  = request.args.get("genero", "")
+    busca = request.args.get("busca", "")
+    genero = request.args.get("genero", "")
     ordenar = request.args.get("ordenar", "data")
     eventos = evento_svc.filtrar(busca=busca, genero=genero, ordenar_por=ordenar)
-    stats   = evento_svc.estatisticas()
+    stats = evento_svc.estatisticas()
     return jsonify({"eventos": eventos, "stats": stats})
 
 @app.route("/api/eventos/<int:evento_id>")
@@ -126,32 +124,32 @@ def api_adicionar_evento():
 
 @app.route("/api/fila/entrar", methods=["POST"])
 def api_entrar_fila():
-    dados   = request.json
+    dados = request.json
     usuario = usuario_logado() or {"id": "visitante", "nome": "Visitante"}
     usuario["usuario_atual"] = True
 
     # Adiciona usuários fictícios na frente para simular a fila
     import random, time
     nomes_ficticios = ["Ana Lima", "Bruno Costa", "Carlos Dias", "Diana Ramos", "Eduardo Souza"]
-    qtd_ficticios   = random.randint(2, 4)
+    qtd_ficticios = random.randint(2, 4)
     for i, nome in enumerate(nomes_ficticios[:qtd_ficticios]):
         ficto = {"id": f"ficto_{i}_{time.time()}", "nome": nome, "usuario_atual": False}
         compra_svc.entrar_na_fila(ficto, dados["evento_id"])
 
-    resultado   = compra_svc.entrar_na_fila(usuario, dados["evento_id"])
-    fila_atual  = compra_svc.estado_fila()
+    resultado = compra_svc.entrar_na_fila(usuario, dados["evento_id"])
+    fila_atual = compra_svc.estado_fila()
     return jsonify({
-        "ok":       True,
-        "posicao":  resultado["posicao"],
-        "timestamp":resultado["timestamp"],
-        "fila":     fila_atual,
-        "tamanho":  compra_svc.tamanho_fila(),
+        "ok": True,
+        "posicao": resultado["posicao"],
+        "timestamp": resultado["timestamp"],
+        "fila": fila_atual,
+        "tamanho": compra_svc.tamanho_fila(),
     })
 
 @app.route("/api/fila/estado")
 def api_estado_fila():
     return jsonify({
-        "fila":    compra_svc.estado_fila(),
+        "fila": compra_svc.estado_fila(),
         "tamanho": compra_svc.tamanho_fila(),
         "proximo": compra_svc.ver_frente(),
     })
@@ -160,8 +158,8 @@ def api_estado_fila():
 def api_proximo_fila():
     proximo = compra_svc.proximo_da_fila()
     return jsonify({
-        "ok":      True,
-        "atendido":proximo,
+        "ok": True,
+        "atendido": proximo,
         "proximo": compra_svc.ver_frente(),
         "tamanho": compra_svc.tamanho_fila(),
     })
@@ -172,15 +170,15 @@ def api_proximo_fila():
 
 @app.route("/api/compra/iniciar", methods=["POST"])
 def api_iniciar_compra():
-    dados   = request.json
+    dados = request.json
     usuario = usuario_logado() or {"id": "visitante", "nome": "Visitante"}
-    acao    = compra_svc.iniciar_compra(usuario["id"], dados["evento_id"], dados.get("quantidade", 1))
+    acao = compra_svc.iniciar_compra(usuario["id"], dados["evento_id"], dados.get("quantidade", 1))
     return jsonify({"ok": True, "acao": acao, "pilha": compra_svc.estado_pilha()})
 
 @app.route("/api/compra/quantidade", methods=["POST"])
 def api_alterar_quantidade():
     dados = request.json
-    acao  = compra_svc.alterar_quantidade(dados["quantidade"])
+    acao = compra_svc.alterar_quantidade(dados["quantidade"])
     return jsonify({"ok": True, "acao": acao, "pilha": compra_svc.estado_pilha()})
 
 @app.route("/api/compra/desfazer", methods=["POST"])
@@ -192,8 +190,8 @@ def api_desfazer():
 
 @app.route("/api/compra/confirmar", methods=["POST"])
 def api_confirmar_compra():
-    dados     = request.json
-    usuario   = usuario_logado() or {"id": "visitante", "nome": "Visitante"}
+    dados = request.json
+    usuario = usuario_logado() or {"id": "visitante", "nome": "Visitante"}
     resultado = compra_svc.confirmar_compra(
         dados["evento_id"], dados["quantidade"], usuario
     )
@@ -205,7 +203,7 @@ def api_confirmar_compra():
 def api_estado_pilha():
     return jsonify({
         "pilha": compra_svc.estado_pilha(),
-        "topo":  compra_svc.topo_pilha(),
+        "topo": compra_svc.topo_pilha(),
     })
 
 # ════════════════════════════════════════════════════════════
