@@ -3,10 +3,5 @@
     "nome": "Demo User",
     "senha": "123456",
     "id": "user_demo"
-  },
-  "AAAAAAAAA@gmail.com": {
-    "nome": "AAAA",
-    "senha": "123456",
-    "id": "user_AAAAAAAAA"
   }
 }

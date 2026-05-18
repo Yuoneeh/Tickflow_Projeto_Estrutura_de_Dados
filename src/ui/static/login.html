@@ -4,10 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TickFlow — Login</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/static/style.css">
 <style>
 .login-wrap { display: flex; min-height: 100vh; }
 
+/* ── Visual lateral ── */
 .login-visual {
   flex: 1; position: relative; overflow: hidden;
   background: var(--bg2); display: flex;
@@ -16,38 +17,39 @@
 .login-visual-bg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(232,255,71,.08) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(255,61,110,.12) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 20% 60%, rgba(61,158,255,.1) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(232,255,71,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(255,61,110,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 60%, rgba(61,158,255,0.1) 0%, transparent 60%);
 }
-.login-visual-art { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: .14; }
+.login-visual-art { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.14; }
 .login-visual-content { position: relative; z-index: 2; }
-.login-tag { display: inline-block; background: var(--neon); color: #080810; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; margin-bottom: 20px; }
-.login-visual h1 { font-family: var(--font-display); font-size: clamp(48px,6vw,80px); line-height: .95; color: var(--text); margin-bottom: 20px; }
+.login-tag { display: inline-block; background: var(--neon); color: #080810; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; margin-bottom: 20px; }
+.login-visual h1 { font-family: var(--font-display); font-size: clamp(48px, 6vw, 80px); line-height: 0.95; color: var(--text); margin-bottom: 20px; }
 .login-visual h1 em { color: var(--neon); font-style: normal; }
-.login-visual p  { color: var(--muted); font-size: 16px; max-width: 380px; line-height: 1.6; }
+.login-visual p { color: var(--muted); font-size: 16px; max-width: 380px; line-height: 1.6; }
 
+/* ── Painel de formulário ── */
 .login-panel {
   width: 460px; flex-shrink: 0; background: var(--bg);
   display: flex; flex-direction: column; justify-content: center;
   padding: 60px 50px; border-left: 1px solid var(--border);
 }
-.login-logo { font-family: var(--font-display); font-size: 28px; letter-spacing: .05em; margin-bottom: 36px; }
+.login-logo { font-family: var(--font-display); font-size: 28px; letter-spacing: 0.05em; margin-bottom: 36px; }
 .login-logo span { color: var(--neon); }
 
 .login-tabs { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 36px; }
-.login-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; color: var(--muted); background: transparent; border: none; font-family: var(--font-body); }
+.login-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: var(--muted); background: transparent; border: none; font-family: var(--font-body); }
 .login-tab.active { background: var(--neon); color: #080810; }
 
 .auth-form { display: flex; flex-direction: column; gap: 18px; }
-.form-title { font-family: var(--font-display); font-size: 32px; letter-spacing: .04em; margin-bottom: 4px; }
+.form-title { font-family: var(--font-display); font-size: 32px; letter-spacing: 0.04em; margin-bottom: 4px; }
 .form-subtitle { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
 
 .auth-divider { text-align: center; position: relative; color: var(--muted); font-size: 12px; }
-.auth-divider::before, .auth-divider::after { content:''; position:absolute; top:50%; width:calc(50% - 24px); height:1px; background:var(--border); }
-.auth-divider::before { left:0; } .auth-divider::after { right:0; }
+.auth-divider::before, .auth-divider::after { content: ''; position: absolute; top: 50%; width: calc(50% - 24px); height: 1px; background: var(--border); }
+.auth-divider::before { left: 0; } .auth-divider::after { right: 0; }
 
-.error-msg { color: var(--neon2); font-size: 13px; background: rgba(255,61,110,.08); border: 1px solid rgba(255,61,110,.2); border-radius: 4px; padding: 10px 14px; display: none; }
+.error-msg { color: var(--neon2); font-size: 13px; background: rgba(255,61,110,0.08); border: 1px solid rgba(255,61,110,0.2); border-radius: 4px; padding: 10px 14px; display: none; }
 .error-msg.visible { display: block; }
 
 @media (max-width: 768px) {
@@ -65,13 +67,13 @@
     <div class="login-visual-bg"></div>
     <div class="login-visual-art">
       <svg viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-        <line x1="300" y1="0" x2="100" y2="400" stroke="#e8ff47" stroke-width="1" opacity=".6"/>
-        <line x1="300" y1="0" x2="200" y2="400" stroke="#e8ff47" stroke-width="1" opacity=".4"/>
-        <line x1="300" y1="0" x2="300" y2="400" stroke="#fff"    stroke-width="1.5" opacity=".5"/>
-        <line x1="300" y1="0" x2="400" y2="400" stroke="#e8ff47" stroke-width="1" opacity=".4"/>
-        <line x1="300" y1="0" x2="500" y2="400" stroke="#ff3d6e" stroke-width="1" opacity=".6"/>
-        <line x1="150" y1="0" x2="50"  y2="400" stroke="#3d9eff" stroke-width="1" opacity=".4"/>
-        <line x1="450" y1="0" x2="560" y2="400" stroke="#3d9eff" stroke-width="1" opacity=".4"/>
+        <line x1="300" y1="0" x2="100" y2="400" stroke="#e8ff47" stroke-width="1" opacity="0.6"/>
+        <line x1="300" y1="0" x2="200" y2="400" stroke="#e8ff47" stroke-width="1" opacity="0.4"/>
+        <line x1="300" y1="0" x2="300" y2="400" stroke="#fff" stroke-width="1.5" opacity="0.5"/>
+        <line x1="300" y1="0" x2="400" y2="400" stroke="#e8ff47" stroke-width="1" opacity="0.4"/>
+        <line x1="300" y1="0" x2="500" y2="400" stroke="#ff3d6e" stroke-width="1" opacity="0.6"/>
+        <line x1="150" y1="0" x2="50" y2="400" stroke="#3d9eff" stroke-width="1" opacity="0.4"/>
+        <line x1="450" y1="0" x2="560" y2="400" stroke="#3d9eff" stroke-width="1" opacity="0.4"/>
         <rect x="50" y="360" width="500" height="20" fill="#1e1e35" rx="2"/>
         <rect x="80" y="340" width="440" height="20" fill="#16162a" rx="2"/>
         <ellipse cx="100" cy="430" rx="18" ry="30" fill="#0d0d1a"/>
@@ -92,16 +94,16 @@
     </div>
   </div>
 
-  <!-- Painel -->
+  <!-- Painel de login -->
   <div class="login-panel animate-in">
     <div class="login-logo">TICK<span>FLOW</span></div>
 
     <div class="login-tabs">
-      <button class="login-tab active" id="tab-login"  onclick="switchTab('login')">Entrar</button>
-      <button class="login-tab"        id="tab-signup" onclick="switchTab('signup')">Criar conta</button>
+      <button class="login-tab active" id="tab-login" onclick="switchTab('login')">Entrar</button>
+      <button class="login-tab" id="tab-signup" onclick="switchTab('signup')">Criar conta</button>
     </div>
 
-    <!-- LOGIN -->
+    <!-- FORM: LOGIN -->
     <div id="form-login" class="auth-form">
       <div>
         <div class="form-title">BEM-VINDO</div>
@@ -114,15 +116,14 @@
       </div>
       <div class="input-group">
         <label>Senha</label>
-        <input type="password" id="loginPassword" placeholder="••••••••" value="123456"
-               onkeydown="if(event.key==='Enter') doLogin()">
+        <input type="password" id="loginPassword" placeholder="••••••••" value="123456" onkeydown="if(event.key==='Enter') doLogin()">
       </div>
       <button class="btn btn-primary btn-full btn-lg" onclick="doLogin()">Entrar</button>
       <div class="auth-divider">ou acesse como visitante</div>
       <button class="btn btn-secondary btn-full" onclick="doVisitante()">Continuar sem conta</button>
     </div>
 
-    <!-- CADASTRO -->
+    <!-- FORM: CADASTRO -->
     <div id="form-signup" class="auth-form hidden">
       <div>
         <div class="form-title">CRIAR CONTA</div>
@@ -139,8 +140,7 @@
       </div>
       <div class="input-group">
         <label>Senha</label>
-        <input type="password" id="signupSenha" placeholder="Mínimo 6 caracteres"
-               onkeydown="if(event.key==='Enter') doSignup()">
+        <input type="password" id="signupSenha" placeholder="Mínimo 6 caracteres" onkeydown="if(event.key==='Enter') doSignup()">
       </div>
       <button class="btn btn-primary btn-full btn-lg" onclick="doSignup()">Criar minha conta</button>
     </div>
@@ -148,56 +148,60 @@
 </div>
 
 <script>
-const API = "http://localhost:5000";
-
 function switchTab(tab) {
-  document.getElementById("form-login") .classList.toggle("hidden", tab !== "login");
-  document.getElementById("form-signup").classList.toggle("hidden", tab !== "signup");
-  document.getElementById("tab-login") .classList.toggle("active", tab === "login");
-  document.getElementById("tab-signup").classList.toggle("active", tab !== "login");
+  document.getElementById('form-login').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('form-signup').classList.toggle('hidden', tab !== 'signup');
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
 }
 
 async function doLogin() {
-  const email = document.getElementById("loginEmail").value.trim();
-  const senha = document.getElementById("loginPassword").value;
-  const errEl = document.getElementById("login-error");
-  errEl.classList.remove("visible");
+  const email = document.getElementById('loginEmail').value.trim();
+  const senha = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('login-error');
+  errEl.classList.remove('visible');
 
-  try {
-    const res  = await fetch(`${API}/api/login`, { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ email, senha }) });
-    const data = await res.json();
-    if (data.ok) { window.location.href = "home.html"; }
-    else { errEl.textContent = data.erro || "Credenciais inválidas."; errEl.classList.add("visible"); }
-  } catch {
-    errEl.textContent = "Não foi possível conectar ao servidor."; errEl.classList.add("visible");
+  const res = await fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, senha })
+  });
+  const data = await res.json();
+  if (data.ok) {
+    window.location.href = '/home';
+  } else {
+    errEl.textContent = data.erro;
+    errEl.classList.add('visible');
   }
 }
 
 async function doSignup() {
-  const nome  = document.getElementById("signupNome").value.trim();
-  const email = document.getElementById("signupEmail").value.trim();
-  const senha = document.getElementById("signupSenha").value;
-  const errEl = document.getElementById("signup-error");
-  errEl.classList.remove("visible");
+  const nome = document.getElementById('signupNome').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const senha = document.getElementById('signupSenha').value;
+  const errEl = document.getElementById('signup-error');
+  errEl.classList.remove('visible');
 
-  if (!nome || !email || !senha) { errEl.textContent = "Preencha todos os campos."; errEl.classList.add("visible"); return; }
-  if (senha.length < 6)          { errEl.textContent = "Senha muito curta (mín. 6 caracteres)."; errEl.classList.add("visible"); return; }
+  if (!nome || !email || !senha) { errEl.textContent = 'Preencha todos os campos.'; errEl.classList.add('visible'); return; }
+  if (senha.length < 6) { errEl.textContent = 'Senha muito curta (mín. 6 caracteres).'; errEl.classList.add('visible'); return; }
 
-  try {
-    const res  = await fetch(`${API}/api/cadastrar`, { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ nome, email, senha }) });
-    const data = await res.json();
-    if (data.ok) { window.location.href = "home.html"; }
-    else { errEl.textContent = data.erro || "Erro ao criar conta."; errEl.classList.add("visible"); }
-  } catch {
-    errEl.textContent = "Não foi possível conectar ao servidor."; errEl.classList.add("visible");
+  const res = await fetch('/api/cadastrar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome, email, senha })
+  });
+  const data = await res.json();
+  if (data.ok) {
+    window.location.href = '/home';
+  } else {
+    errEl.textContent = data.erro;
+    errEl.classList.add('visible');
   }
 }
 
 async function doVisitante() {
-  try {
-    await fetch(`${API}/api/visitante`, { method:"POST", credentials:"include" });
-  } catch {}
-  window.location.href = "home.html";
+  await fetch('/api/visitante', { method: 'POST' });
+  window.location.href = '/home';
 }
 </script>
 </body>

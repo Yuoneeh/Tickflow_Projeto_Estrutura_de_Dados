@@ -4,59 +4,57 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TickFlow — Catálogo</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/static/style.css">
 <style>
-/* ── Hero ── */
 .hero { position: relative; padding: 80px 40px 60px; overflow: hidden; }
-.hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 10% 50%, rgba(232,255,71,.06) 0%, transparent 60%), radial-gradient(ellipse 50% 60% at 90% 20%, rgba(255,61,110,.07) 0%, transparent 60%); pointer-events: none; }
+.hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 10% 50%, rgba(232,255,71,0.06) 0%, transparent 60%), radial-gradient(ellipse 50% 60% at 90% 20%, rgba(255,61,110,0.07) 0%, transparent 60%); pointer-events: none; }
 .hero-inner { position: relative; z-index: 1; max-width: 700px; }
 .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
 .hero-dot { width: 8px; height: 8px; background: var(--neon); border-radius: 50%; animation: pulse 2s infinite; }
-.hero-eyebrow span { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--neon); }
-.hero h2 { font-family: var(--font-display); font-size: clamp(48px,7vw,96px); line-height: .9; color: var(--text); margin-bottom: 24px; }
+.hero-eyebrow span { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--neon); }
+.hero h2 { font-family: var(--font-display); font-size: clamp(48px, 7vw, 96px); line-height: 0.9; color: var(--text); margin-bottom: 24px; }
 .hero h2 .outline { -webkit-text-stroke: 1px var(--text); color: transparent; }
 .hero p { color: var(--muted); font-size: 16px; line-height: 1.7; max-width: 500px; margin-bottom: 32px; }
-.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 .hero-stats { display: flex; gap: 48px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); flex-wrap: wrap; }
 .stat-value { font-family: var(--font-display); font-size: 36px; color: var(--neon); line-height: 1; }
-.stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .06em; }
+.stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
 
-/* ── Catálogo ── */
+/* catalog */
 .catalog-section { padding: 0 40px 80px; }
 .section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; }
-.section-title { font-family: var(--font-display); font-size: 40px; letter-spacing: .03em; }
+.section-title { font-family: var(--font-display); font-size: 40px; letter-spacing: 0.03em; }
 .section-count { font-size: 13px; color: var(--muted); font-family: var(--font-mono); }
 .filters { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; align-items: center; }
 .search-wrap { position: relative; flex: 1; min-width: 220px; max-width: 320px; }
-.search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); }
 .search-wrap input { padding-left: 42px; }
 .filter-select { width: auto; min-width: 160px; }
-.filter-chip { padding: 10px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 40px; font-size: 13px; color: var(--muted); cursor: pointer; transition: all .2s; white-space: nowrap; font-family: var(--font-body); }
-.filter-chip:hover, .filter-chip.active { border-color: var(--neon); color: var(--neon); background: rgba(232,255,71,.06); }
+.filter-chip { padding: 10px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 40px; font-size: 13px; color: var(--muted); cursor: pointer; transition: all 0.2s; white-space: nowrap; font-family: var(--font-body); }
+.filter-chip:hover, .filter-chip.active { border-color: var(--neon); color: var(--neon); background: rgba(232,255,71,0.06); }
 
-/* ── Grid de cards ── */
+/* grid */
 .event-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-.event-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all .3s; }
-.event-card:hover { border-color: rgba(232,255,71,.3); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+.event-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.3s; }
+.event-card:hover { border-color: rgba(232,255,71,0.3); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
 .card-visual { height: 180px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-.card-emoji { font-size: 72px; filter: drop-shadow(0 0 30px rgba(255,255,255,.2)); }
-.card-badge { position: absolute; top: 12px; right: 12px; background: rgba(8,8,16,.85); backdrop-filter: blur(8px); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 600; font-family: var(--font-mono); color: var(--neon); }
+.card-emoji { font-size: 72px; filter: drop-shadow(0 0 30px rgba(255,255,255,0.2)); }
+.card-badge { position: absolute; top: 12px; right: 12px; background: rgba(8,8,16,0.85); backdrop-filter: blur(8px); border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 600; font-family: var(--font-mono); color: var(--neon); }
 .card-body { padding: 20px; }
-.card-genre { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-.card-name { font-family: var(--font-display); font-size: 24px; letter-spacing: .02em; margin-bottom: 4px; line-height: 1.1; }
+.card-genre { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.card-name { font-family: var(--font-display); font-size: 24px; letter-spacing: 0.02em; margin-bottom: 4px; line-height: 1.1; }
 .card-artist { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
 .card-info { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
 .card-info-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
 .card-info-row svg { flex-shrink: 0; color: var(--neon); }
 .card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--border); }
-.card-price { font-family: var(--font-display); font-size: 28px; color: var(--neon); }
-.card-price-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-.badge-sold { position: absolute; top:12px; left:12px; background: var(--neon2); border-radius:20px; padding:4px 12px; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#fff; }
-.badge-low  { position: absolute; top:12px; left:12px; background: rgba(232,255,71,.15); border:1px solid rgba(232,255,71,.4); border-radius:20px; padding:4px 12px; font-size:10px; font-weight:700; text-transform:uppercase; color:var(--neon); }
+.card-price { font-family: var(--font-display); font-size: 28px; color: var(--neon); letter-spacing: 0.02em; }
+.card-price-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.badge-sold { position: absolute; top: 12px; left: 12px; background: var(--neon2); border-radius: 20px; padding: 4px 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+.badge-low { position: absolute; top: 12px; left: 12px; background: rgba(232,255,71,0.15); border: 1px solid rgba(232,255,71,0.4); border-radius: 20px; padding: 4px 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--neon); }
 
-.empty-state { grid-column:1/-1; text-align:center; padding:80px 40px; color:var(--muted); }
-.empty-icon { font-size:64px; display:block; margin-bottom:20px; opacity:.4; }
-.empty-state h3 { font-family:var(--font-display); font-size:28px; color:var(--text); margin-bottom:8px; }
+.empty-state { text-align: center; padding: 80px 40px; color: var(--muted); grid-column: 1 / -1; }
+.empty-state-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.4; display: block; }
+.empty-state h3 { font-family: var(--font-display); font-size: 28px; color: var(--text); margin-bottom: 8px; }
 
 @media (max-width: 768px) {
   .hero { padding: 40px 20px 32px; }
@@ -68,7 +66,7 @@
 <body>
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- MODAL: ADICIONAR SHOW -->
+<!-- MODAL: ADD SHOW -->
 <div class="modal-overlay hidden" id="modalAddShow">
   <div class="modal">
     <div class="modal-header">
@@ -86,10 +84,10 @@
         </div>
       </div>
       <div class="modal-row">
-        <div class="input-group"><label>Data</label><input type="date" id="nData"></div>
+        <div class="input-group"><label>Data do Evento</label><input type="date" id="nData"></div>
         <div class="input-group"><label>Horário</label><input type="time" id="nHorario" value="20:00"></div>
       </div>
-      <div class="input-group"><label>Local / Venue</label><input type="text" id="nLocal" placeholder="Ex: Allianz Parque, SP"></div>
+      <div class="input-group"><label>Local / Venue</label><input type="text" id="nLocal" placeholder="Ex: Allianz Parque, São Paulo"></div>
       <div class="modal-row">
         <div class="input-group"><label>Preço (R$)</label><input type="number" id="nPreco" placeholder="150" min="0"></div>
         <div class="input-group"><label>Qtd. Ingressos</label><input type="number" id="nIngressos" placeholder="5000" min="1"></div>
@@ -109,7 +107,7 @@
 
 <!-- TOPBAR -->
 <nav class="topbar">
-  <a class="logo" href="home.html">TICK<span>FLOW</span></a>
+  <a class="logo" href="/home">TICK<span>FLOW</span></a>
   <div class="topbar-actions">
     <button class="btn btn-primary btn-sm" onclick="openModal()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -130,7 +128,7 @@
     <div class="hero-eyebrow"><div class="hero-dot"></div><span>Vendas abertas agora</span></div>
     <h2>GRANDES<br><span class="outline">SHOWS</span><br>TE ESPERAM</h2>
     <p>Compre ingressos com segurança e com nosso sistema de fila FIFO — sem bots, sem fraudes.</p>
-    <div class="hero-ctas">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
       <button class="btn btn-primary btn-lg" onclick="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})">Ver catálogo</button>
       <button class="btn btn-secondary btn-lg" onclick="openModal()">+ Adicionar show</button>
     </div>
@@ -158,11 +156,11 @@
       <option value="preco_desc">Maior preço</option>
       <option value="nome">Nome A-Z</option>
     </select>
-    <button class="filter-chip active" id="chip-todos"  onclick="setGenre('')">Todos</button>
-    <button class="filter-chip"        id="chip-Rock"   onclick="setGenre('Rock')">Rock</button>
-    <button class="filter-chip"        id="chip-Pop"    onclick="setGenre('Pop')">Pop</button>
-    <button class="filter-chip"        id="chip-Elet"   onclick="setGenre('Eletrônico')">Eletrônico</button>
-    <button class="filter-chip"        id="chip-Metal"  onclick="setGenre('Metal')">Metal</button>
+    <button class="filter-chip active" id="chip-todos" onclick="setGenre('')">Todos</button>
+    <button class="filter-chip" id="chip-rock" onclick="setGenre('Rock')">Rock</button>
+    <button class="filter-chip" id="chip-pop" onclick="setGenre('Pop')">Pop</button>
+    <button class="filter-chip" id="chip-elet" onclick="setGenre('Eletrônico')">Eletrônico</button>
+    <button class="filter-chip" id="chip-metal" onclick="setGenre('Metal')">Metal</button>
   </div>
   <div class="event-grid" id="eventGrid">
     <div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);">Carregando eventos...</div>
@@ -170,62 +168,48 @@
 </section>
 
 <script>
-const API = "http://localhost:5000";
-let generoAtivo = "";
+let generoAtivo = '';
 
 async function init() {
-  // Verifica sessão
-  try {
-    const res = await fetch(`${API}/api/me`, { credentials: "include" });
-    if (!res.ok) { window.location.href = "login.html"; return; }
-    const data = await res.json();
-    const nome = data.usuario.nome;
-    document.getElementById("userName").textContent = nome.split(" ")[0];
-    document.getElementById("userAvatar").textContent = nome.split(" ").map(n => n[0]).join("").toUpperCase().slice(0,2);
-  } catch {
-    // Se não conseguir conectar, mostra visitante mas não redireciona
-    document.getElementById("userName").textContent = "Visitante";
-    document.getElementById("userAvatar").textContent = "V";
-  }
+  const res = await fetch('/api/me');
+  if (!res.ok) { window.location.href = '/'; return; }
+  const data = await res.json();
+  const nome = data.usuario.nome;
+  document.getElementById('userName').textContent = nome.split(' ')[0];
+  document.getElementById('userAvatar').textContent = nome.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
   loadEventos();
 }
 
 async function loadEventos() {
-  const busca   = document.getElementById("searchInput").value;
-  const ordenar = document.getElementById("sortSelect").value;
-  try {
-    const res  = await fetch(`${API}/api/eventos?busca=${encodeURIComponent(busca)}&genero=${encodeURIComponent(generoAtivo)}&ordenar=${ordenar}`, { credentials:"include" });
-    const data = await res.json();
-    renderGrid(data.eventos || []);
-    if (data.stats) {
-      document.getElementById("statEventos").textContent  = data.stats.total_eventos;
-      document.getElementById("statIngressos").textContent = (data.stats.total_ingressos_disponiveis || 0).toLocaleString("pt-BR");
-    }
-    const n = (data.eventos || []).length;
-    document.getElementById("catalogCount").textContent = `${n} evento${n !== 1 ? "s" : ""}`;
-  } catch {
-    document.getElementById("eventGrid").innerHTML = `<div class="empty-state"><span class="empty-icon">⚠️</span><h3>Servidor offline</h3><p>Aguardando o backend do grupo...</p></div>`;
-  }
+  const busca = document.getElementById('searchInput').value;
+  const ordenar = document.getElementById('sortSelect').value;
+  const params = new URLSearchParams({ busca, genero: generoAtivo, ordenar });
+  const res = await fetch(`/api/eventos?${params}`);
+  const data = await res.json();
+  renderGrid(data.eventos);
+  document.getElementById('statEventos').textContent = data.stats.total_eventos;
+  document.getElementById('statIngressos').textContent = data.stats.total_ingressos_disponiveis.toLocaleString('pt-BR');
+  document.getElementById('catalogCount').textContent = `${data.eventos.length} evento${data.eventos.length !== 1 ? 's' : ''}`;
 }
 
 function renderGrid(eventos) {
-  const grid = document.getElementById("eventGrid");
+  const grid = document.getElementById('eventGrid');
   if (!eventos.length) {
-    grid.innerHTML = `<div class="empty-state"><span class="empty-icon">🎵</span><h3>Nenhum show encontrado</h3><p>Tente outro filtro ou adicione um show.</p></div>`;
+    grid.innerHTML = `<div class="empty-state"><span class="empty-state-icon">🎵</span><h3>Nenhum show encontrado</h3><p>Tente outro filtro ou adicione um show.</p></div>`;
     return;
   }
   grid.innerHTML = eventos.map(e => {
-    const disp    = e.ingressos - e.vendidos;
-    const pct     = Math.round((e.vendidos / e.ingressos) * 100);
+    const disp = e.ingressos - e.vendidos;
+    const pct = Math.round((e.vendidos / e.ingressos) * 100);
     const esgotado = disp <= 0;
-    const baixo    = pct >= 90 && !esgotado;
-    const dataFmt  = new Date(e.data + "T12:00:00").toLocaleDateString("pt-BR", { day:"2-digit", month:"short", year:"numeric" });
+    const baixo = pct >= 90 && !esgotado;
+    const dataFmt = new Date(e.data + 'T12:00:00').toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
     return `
-    <div class="event-card" onclick="window.location.href='evento.html?id=${e.id}'">
+    <div class="event-card" onclick="window.location.href='/evento?id=${e.id}'">
       <div class="card-visual" style="background: radial-gradient(ellipse at 50% 40%, ${e.cor}22 0%, ${e.cor}08 60%, transparent 100%), var(--surface2);">
         <div class="card-emoji">${e.emoji}</div>
-        <div class="card-badge">R$ ${e.preco.toLocaleString("pt-BR")}</div>
-        ${esgotado ? '<div class="badge-sold">Esgotado</div>' : baixo ? '<div class="badge-low">Últimos!</div>' : ""}
+        <div class="card-badge">R$ ${e.preco.toLocaleString('pt-BR')}</div>
+        ${esgotado ? '<div class="badge-sold">Esgotado</div>' : baixo ? '<div class="badge-low">Últimos!</div>' : ''}
       </div>
       <div class="card-body">
         <div class="card-genre">${e.genero}</div>
@@ -244,66 +228,72 @@ function renderGrid(eventos) {
         <div class="card-footer">
           <div>
             <div class="card-price-label">a partir de</div>
-            <div class="card-price">R$ ${e.preco.toLocaleString("pt-BR")}</div>
+            <div class="card-price">R$ ${e.preco.toLocaleString('pt-BR')}</div>
           </div>
-          <span class="btn btn-primary btn-sm" style="pointer-events:none;">${esgotado ? "Esgotado" : "Ver show"}</span>
+          <span class="btn btn-primary btn-sm" style="pointer-events:none;">${esgotado ? 'Esgotado' : 'Ver show'}</span>
         </div>
       </div>
     </div>`;
-  }).join("");
+  }).join('');
 }
 
 function setGenre(g) {
   generoAtivo = g;
-  document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
-  const map = { "":"chip-todos", "Rock":"chip-Rock", "Pop":"chip-Pop", "Eletrônico":"chip-Elet", "Metal":"chip-Metal" };
-  const el = document.getElementById(map[g]); if (el) el.classList.add("active");
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  const map = { '': 'chip-todos', 'Rock': 'chip-rock', 'Pop': 'chip-pop', 'Eletrônico': 'chip-elet', 'Metal': 'chip-metal' };
+  const el = document.getElementById(map[g]);
+  if (el) el.classList.add('active');
   loadEventos();
 }
 
 function openModal() {
   const d = new Date(); d.setDate(d.getDate() + 30);
-  document.getElementById("nData").value = d.toISOString().split("T")[0];
-  document.getElementById("modalAddShow").classList.remove("hidden");
+  document.getElementById('nData').value = d.toISOString().split('T')[0];
+  document.getElementById('modalAddShow').classList.remove('hidden');
 }
-function closeModal() { document.getElementById("modalAddShow").classList.add("hidden"); }
-document.getElementById("modalAddShow").addEventListener("click", e => { if (e.target === e.currentTarget) closeModal(); });
+function closeModal() { document.getElementById('modalAddShow').classList.add('hidden'); }
+document.getElementById('modalAddShow').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
 
 async function addShow() {
   const dados = {
-    nome:      document.getElementById("nNome").value.trim(),
-    artista:   document.getElementById("nArtista").value.trim(),
-    genero:    document.getElementById("nGenero").value,
-    data:      document.getElementById("nData").value,
-    horario:   document.getElementById("nHorario").value,
-    local:     document.getElementById("nLocal").value.trim(),
-    preco:     document.getElementById("nPreco").value,
-    ingressos: document.getElementById("nIngressos").value,
-    emoji:     document.getElementById("nEmoji").value || "🎵",
-    cor:       document.getElementById("nCor").value,
-    descricao: document.getElementById("nDesc").value.trim(),
+    nome: document.getElementById('nNome').value.trim(),
+    artista: document.getElementById('nArtista').value.trim(),
+    genero: document.getElementById('nGenero').value,
+    data: document.getElementById('nData').value,
+    horario: document.getElementById('nHorario').value,
+    local: document.getElementById('nLocal').value.trim(),
+    preco: document.getElementById('nPreco').value,
+    ingressos: document.getElementById('nIngressos').value,
+    emoji: document.getElementById('nEmoji').value || '🎵',
+    cor: document.getElementById('nCor').value,
+    descricao: document.getElementById('nDesc').value.trim(),
   };
   if (!dados.nome || !dados.artista || !dados.data || !dados.local || !dados.preco || !dados.ingressos) {
-    showToast("Preencha todos os campos obrigatórios", "error"); return;
+    showToast('Preencha todos os campos obrigatórios', 'error'); return;
   }
-  try {
-    const res  = await fetch(`${API}/api/eventos`, { method:"POST", credentials:"include", headers:{"Content-Type":"application/json"}, body: JSON.stringify(dados) });
-    const data = await res.json();
-    if (data.ok) { closeModal(); loadEventos(); showToast(`"${dados.nome}" adicionado! 🎉`, "success"); ["nNome","nArtista","nLocal","nPreco","nIngressos","nEmoji","nDesc"].forEach(id => document.getElementById(id).value=""); }
-    else showToast(data.erro || "Erro ao adicionar show", "error");
-  } catch { showToast("Servidor offline", "error"); }
+  const res = await fetch('/api/eventos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) });
+  const data = await res.json();
+  if (data.ok) {
+    closeModal(); loadEventos();
+    showToast(`"${dados.nome}" adicionado! 🎉`, 'success');
+    ['nNome','nArtista','nLocal','nPreco','nIngressos','nEmoji','nDesc'].forEach(id => document.getElementById(id).value = '');
+  } else {
+    showToast(data.erro || 'Erro ao adicionar show', 'error');
+  }
 }
 
 async function logout() {
-  try { await fetch(`${API}/api/logout`, { method:"POST", credentials:"include" }); } catch {}
-  window.location.href = "login.html";
+  await fetch('/api/logout', { method: 'POST' });
+  window.location.href = '/';
 }
 
-function showToast(msg, type="success") {
-  const c = document.getElementById("toastContainer");
-  const t = document.createElement("div"); t.className = `toast ${type}`;
-  t.innerHTML = `<span>${type==="success"?"✓":"⚠"}</span> ${msg}`;
-  c.appendChild(t); setTimeout(() => t.remove(), 3500);
+function showToast(msg, type = 'success') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${type === 'success' ? '✓' : '⚠'}</span> ${msg}`;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
 }
 
 init();
